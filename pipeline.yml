@@ -45,6 +45,10 @@ jobs:
                 which pip
                 echo "where is pip3..."
                 which pip3
+                pip install pipenv
+                #make install
+                make checks
+                make test
                 echo "testing if we are in a venv..."
                 python3 venv_test.py
                 echo "setting up a venv..."
@@ -53,11 +57,8 @@ jobs:
                 source venv/bin/activate
                 echo "checking if were are now in a venv..."
                 python3 venv_test.py
-                echo "installing pipenv via pip..."
-                pip install pipenv
-                echo "testing python3 lib install in venv..."
-                make install
-                make checks
-                make test
+                #echo "installing pipenv via pip..."
+                #pip install pipenv
+                #echo "testing python3 lib install in venv..."
                 echo "Tests complete."
             dir: ah-test-repo

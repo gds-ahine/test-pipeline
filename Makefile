@@ -11,11 +11,12 @@ test: checks
 	pipenv run pytest -sqx --disable-warnings
 	echo "✔️ Tests passed!"
 
-checks: Pipfile.lock
+checks: #Pipfile.lock
 	echo "⏳ running pipeline..."
 	set -e
 	#pipenv run isort --atomic -yq
 	#pipenv run black -q .
+	pipenv install flake8 
 	pipenv run flake8 --max-line-length=88 .  # in line with black
 	#pipenv run mypy --pretty .
 	echo "✔️ Checks pipeline passed!"
