@@ -19,7 +19,7 @@ checks:
 	echo "⏳ running pipeline..."
 	set -e
 	#isort --atomic -yq
-	black -q .
+	#black -q .
 	flake8 . --max-line-length=91
 	#mypy --pretty .
 	echo "✔️ Checks pipeline passed!"
