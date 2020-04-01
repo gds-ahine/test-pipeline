@@ -1,0 +1,52 @@
+---
+resources:
+
+  - name: ah-test-repo
+    icon: github-circle
+    type: git
+    source:
+      uri: git@github.com:gds-ahine/test-pipeline
+      branch: master
+      #private_key: ((deploy-key))
+
+resource_types:
+  - name: ah_test_img
+    type: docker-image
+    source:
+      repository: gdscyber/ah-test-image
+
+jobs:
+  - name: aaron_test_pipeline
+    plan:
+      - get: ah-test-repo
+        trigger: false
+
+      - task: test_task
+        config:
+          <<: *ah_test_img
+          inputs:
+          - name: ah-test-repo
+          run:
+            path: /bin/bash
+            args:
+              - -c
+              - |
+                echo "where is python..."
+                which python
+                echo "where is python3..."
+                which python3
+                echo "version of python3..."
+                python3 -V
+                echo "where is pip..."
+                which pip
+                echo "where is pip3..."
+                which pip3
+                echo "testing venv..."
+                python3 -m venv venv
+                source venv/bin/activate
+                echo "testing python3 lib install in venv..."
+                make install
+                #make checks
+                #make test
+                echo "Tests complete."
+            dir: ah-test-repo
