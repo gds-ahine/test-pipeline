@@ -46,8 +46,6 @@ jobs:
                 echo "where is pip3..."
                 which pip3
                 pip install pipenv
-                #make install
-                make checks
                 make test
                 echo "testing if we are in a venv..."
                 python3 venv_test.py

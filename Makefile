@@ -16,24 +16,8 @@ checks: #Pipfile.lock
 	set -e
 	#pipenv run isort --atomic -yq
 	#pipenv run black -q .
+	pipenv install pytest 
 	pipenv install flake8 
 	pipenv run flake8 --max-line-length=88 .  # in line with black
 	#pipenv run mypy --pretty .
 	echo "✔️ Checks pipeline passed!"
-
-Pipfile.lock:
-	set -e
-	echo "⏳ installing..."
-	pipenv install flake8 mypy watchdog pyyaml argh pytest isort
-	pipenv install --pre black
-	pipenv run mypy_boto3 -q && echo  "✔️ mypy_boto3 stubs installed!"!! || true # ignored if not installed
-	echo "✔️ Pip dependencies installed!"
-
-upgrade:
-	set -e
-	wget -q https://raw.githubusercontent.com/alphagov/cyber-security-tools/master/python/Makefile -O Makefile
-	echo "✔️ Upgraded Makefile!"
-
-watch:
-	echo "✔️ Watch setup, save a python file to trigger test pipeline"
-	pipenv run watchmedo shell-command --drop --ignore-directories --patterns="*.py" --ignore-patterns="*#*" --recursive --command='clear && make --no-print-directory test' .
