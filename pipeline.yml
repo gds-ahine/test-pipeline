@@ -5,15 +5,19 @@ resources:
     icon: github-circle
     type: git
     source:
-      uri: git@github.com:gds-ahine/test-pipeline
+      uri: "https://github.com/gds-ahine/test-pipeline"
       branch: master
       #private_key: ((deploy-key))
 
-resource_types:
-  - name: ah_test_img
-    type: docker-image
-    source:
-      repository: gdscyber/ah-test-image
+blocks:
+  - config: &ah_test_img
+
+      platform: linux
+
+      image_resource:
+        type: docker-image
+        source:
+          repository: gdscyber/ah-test-image
 
 jobs:
   - name: aaron_test_pipeline
@@ -42,8 +46,10 @@ jobs:
                 echo "where is pip3..."
                 which pip3
                 echo "testing venv..."
+                python3 venv_test.py
                 python3 -m venv venv
                 source venv/bin/activate
+                python3 venv_test.py
                 echo "testing python3 lib install in venv..."
                 make install
                 #make checks
