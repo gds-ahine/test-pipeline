@@ -18,7 +18,7 @@ test: checks
 checks:
 	echo "⏳ running pipeline..."
 	set -e
-	isort --atomic -yq
+	#isort --atomic -yq
 	black -q .
 	flake8 . --max-line-length=91
 	#mypy --pretty .
