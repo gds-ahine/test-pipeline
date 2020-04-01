@@ -53,6 +53,8 @@ jobs:
                 source venv/bin/activate
                 echo "checking if were are now in a venv..."
                 python3 venv_test.py
+                echo "installing pipenv via pip..."
+                pip install pipenv
                 echo "testing python3 lib install in venv..."
                 make install
                 make checks
