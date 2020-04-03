@@ -55,8 +55,11 @@ jobs:
                 source venv/bin/activate
                 echo "checking if were are now in a venv..."
                 python3 venv_test.py
-                #echo "installing pipenv via pip..."
-                #pip install pipenv
-                #echo "testing python3 lib install in venv..."
+                echo "installing pipenv via pip..."
+                pip install pipenv
+                echo "testing python3 lib install in venv..."
                 echo "Tests complete."
+                #echo "Testing AssumeRole..."
+                #source /usr/local/bin/sts-assume-role.sh 'arn:aws:iam::12345678910:role/SomeRole' 'eu-west-2'
+                #echo $AWS_DEFAULT_REGION
             dir: ah-test-repo
