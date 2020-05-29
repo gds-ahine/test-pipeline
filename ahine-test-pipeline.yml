@@ -1,20 +1,21 @@
 ---
-resource_types:
-  - name: test_s3_bucket
-  type: s3
-  source:
-    bucket: ((readonly_private_bucket_name))
-    #regexp: directory_on_s3/release-(.*).tgz
-    #access_key_id: ACCESS-KEY
-    #secret_access_key: SECRET
-
 resources:
-- name: test_git
-  type: git
-  source:
-    branch: master
-    #private_key: ((pipeline-git-priv-key))
-    uri: git@github.com:gds-ahine/test-pipeline.git
+  #- name: test_git
+  #  icon: github-circle
+  #  type: git
+  #  source:
+  #    branch: master
+  #    #private_key: ((pipeline-git-priv-key))
+  #    uri: git@github.com:gds-ahine/test-pipeline.git
+
+  - name: test_s3_bucket
+    type: s3
+    source:
+      bucket: ((readonly_private_bucket_name))
+      regexp: (*).zip
+      #regexp: directory_on_s3/release-(.*).tgz
+      #access_key_id: ACCESS-KEY
+      #secret_access_key: SECRET
 
 blocks:
   - config: &docker_config
@@ -30,22 +31,25 @@ jobs:
   - name: s3_test
     serial: true
     plan:
-    - get: test_git
-        trigger: false
+    #- get: test_git
+    #  trigger: false
     - task: s3-test-task
       config:
         <<: *docker_config
-        inputs:
-          - name: test_git
-        outputs:
-          - name: s3_test_file
-            path: my_testfile
+        #inputs:
+        #  - name: test_git
+        #outputs:
+        #  - name: s3_test_file
+        #    path: ah_testfile/foo
         run:
             path: bash
             args:
               - -c
               - |
-                echo "doing something..."
+                echo 'Creating a testfile to upload to s3...'
+                pwd
+                touch test.zip
+                echo 'Uploading testfile to s3...'
     - put: test_s3_bucket
       params:
-        file: my_testfile
+        file: test.zip
