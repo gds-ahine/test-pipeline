@@ -22,9 +22,9 @@ checks: setup
 setup:
 	set -e
 	echo "⏳ installing..."
-        pip install --upgrade pip
-        pip install pipenv
-        pipenv install --dev
+	pip install --upgrade pip
+	pip install pipenv
+	pipenv install --dev
 	pipenv install flake8 mypy watchdog pyyaml argh pytest isort
 	pipenv install --pre black
 	pipenv run mypy_boto3 -q && echo  "✔️ mypy_boto3 stubs installed!"!! || true # ignored if not installed
