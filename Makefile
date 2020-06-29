@@ -4,13 +4,13 @@
 # Comments to cyber.security@digital.cabinet-office.gov.uk
 # This is free and unencumbered software released into the public domain.
 
-.SILENT: test install upgrade watch checks Pipfile.lock
+.SILENT: test install setup upgrade watch checks Pipfile.lock
 
 test: checks
 	pipenv run pytest -sqx --disable-warnings
 	echo "✔️ Tests passed!"
 
-checks: Pipfile.lock
+checks: setup
 	echo "⏳ running pipeline..."
 	set -e
 	pipenv run isort --atomic -yq
@@ -19,9 +19,12 @@ checks: Pipfile.lock
 	pipenv run mypy --pretty .
 	echo "✔️ Checks pipeline passed!"
 
-Pipfile.lock:
+setup:
 	set -e
 	echo "⏳ installing..."
+        pip install --upgrade pip
+        pip install pipenv
+        pipenv install --dev
 	pipenv install flake8 mypy watchdog pyyaml argh pytest isort
 	pipenv install --pre black
 	pipenv run mypy_boto3 -q && echo  "✔️ mypy_boto3 stubs installed!"!! || true # ignored if not installed
