@@ -1,4 +1,10 @@
 ---
+resource_types:
+  - name: s3-iam
+    type: docker-image
+    source:
+      repository: governmentpaas/s3-resource
+
 resources:
   #- name: test_git
   #  icon: github-circle
@@ -8,14 +14,13 @@ resources:
   #    #private_key: ((pipeline-git-priv-key))
   #    uri: git@github.com:gds-ahine/test-pipeline.git
 
-  - name: test_s3_bucket
-    type: s3
+  - name: upload_file_to_s3
+    icon: file
+    type: s3-iam
     source:
       bucket: ((readonly_private_bucket_name))
-      regexp: (*).zip
-      #regexp: directory_on_s3/release-(.*).tgz
-      #access_key_id: ACCESS-KEY
-      #secret_access_key: SECRET
+      region_name: eu-west-2
+      versioned_file: test.txt
 
 blocks:
   - config: &docker_config
@@ -28,28 +33,56 @@ blocks:
 
 
 jobs:
-  - name: s3_test
+  - name: s3_upload_test
     serial: true
     plan:
-    #- get: test_git
-    #  trigger: false
-    - task: s3-test-task
+    - task: s3-upload-test-task
       config:
         <<: *docker_config
-        #inputs:
-        #  - name: test_git
-        #outputs:
-        #  - name: s3_test_file
-        #    path: ah_testfile/foo
+        outputs:
+          - name: upload_file_to_s3
         run:
             path: bash
             args:
               - -c
               - |
+                mkdir -p upload_file_to_s3
                 echo 'Creating a testfile to upload to s3...'
-                pwd
-                touch test.zip
+                touch upload_file_to_s3/test.txt
+                echo 's3 file test' > upload_file_to_s3/test.txt
                 echo 'Uploading testfile to s3...'
-    - put: test_s3_bucket
+    - put: upload_file_to_s3
       params:
-        file: test.zip
+        file: upload_file_to_s3/test.txt
+        #on_success:
+        #  task: check-file-uploaded-to-s3
+        #  config:
+          #        <<: *docker_config
+          #        inputs:
+          #          - name: upload_file_to_s3
+          #        run:
+          #          path: bash
+          #          args:
+          #            - -c
+          #            - |
+          #              pwd
+          #              ls -l upload_file_to_s3
+
+
+  - name: s3_download_test
+    serial: true
+    plan:
+      - get: upload_file_to_s3
+      - task: s3-download-test-task
+        config:
+          <<: *docker_config
+          inputs:
+            - name: upload_file_to_s3
+          run:
+            path: bash
+            args:
+              - -c
+              - |
+                aws s3 ls
+                aws s3 rm s3://((readonly_private_bucket_name))/test.txt
+                aws s3 ls
