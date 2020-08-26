@@ -1,3 +1,5 @@
+name: test_iam_lint
+
 - uses: actions/checkout@v2
 - uses: xen0l/iam-lint@v1
   with:
