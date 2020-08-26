@@ -2,8 +2,8 @@
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Action": "ec2:RunInstances",
-            "Resource": "arn:aws:ec2:sa-east-1:111122223333:instance/*",
+            "Action": "ec2:DescribeInstances",
+            "Resource": "*",
             "Effect": "Allow"
         }
     ]
