@@ -1,4 +1,17 @@
-- uses: actions/checkout@v2
-- uses: xen0l/iam-lint@v1
-  with:
-    path: 'test_policies'
+---
+name: iam_lint_test
+
+on:
+  push:
+
+jobs:
+  iam-linter:
+    name: IAM Linting Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: IAM_Lint
+        uses: xen0l/iam-lint@v1
+        with:
+          path: 'test_policies'
