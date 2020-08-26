@@ -2,8 +2,9 @@
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Action": "ec2:assumeRole",
+            "Action": "sts:AssumeRole",
             "Resource": "*",
             "Effect": "Allow"
         }
     ]
+}
