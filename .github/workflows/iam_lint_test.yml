@@ -1,6 +1,17 @@
-name: test_iam_lint
+---
+name: iam_lint_test
 
-- uses: actions/checkout@v2
-- uses: xen0l/iam-lint@v1
-  with:
-    path: 'test_policies'
+on:
+  push:
+
+jobs:
+  iam-linter:
+    name: IAM Linting Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: IAM_Lint
+        uses: xen0l/iam-lint@v1hashicorp/setup-terraform@v1
+        with:
+          path: 'test_policies'
