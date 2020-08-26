@@ -15,3 +15,4 @@ jobs:
     - uses: xen0l/iam-lint@v1
       with:
         path: 'test_policies'
+        minimum_severity: HIGH
