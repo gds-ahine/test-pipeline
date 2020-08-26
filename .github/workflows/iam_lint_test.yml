@@ -12,6 +12,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: IAM_Lint
-        uses: xen0l/iam-lint@v1hashicorp/setup-terraform@v1
+        uses: xen0l/iam-lint@v1
         with:
           path: 'test_policies'
